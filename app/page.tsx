@@ -8,7 +8,7 @@ export default function AdminCommandConsolePage() {
   const [activeTab, setActiveTab] = useState<'all' | 'cardiology' | 'endocrinology' | 'general'>('all');
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto w-full">
       {/* ── TOP OPERATIONAL MASTHEAD ────────────────────────────────────────────── */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-slate-800">
         <div>

@@ -106,7 +106,91 @@ export default function AdminConsultantsPage() {
           <span className="text-slate-400 font-mono">15% platform commission rate</span>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile View: High-Density Physician Cards */}
+        <div className="md:hidden divide-y divide-slate-800">
+          {filteredConsultants.map((doc) => (
+            <div key={doc.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={doc.avatarUrl}
+                    alt={doc.name}
+                    className="w-12 h-12 rounded-xl object-cover border border-slate-700 shrink-0"
+                  />
+                  <div>
+                    <Link
+                      href={`/consultants/${doc.id}`}
+                      className="text-sm font-bold text-white hover:text-sky-400"
+                    >
+                      {doc.name}
+                    </Link>
+                    <div className="text-xs text-sky-400 font-semibold">{doc.specialty}</div>
+                    <div className="text-[10px] text-slate-400 truncate max-w-[200px]">{doc.hospital}</div>
+                  </div>
+                </div>
+
+                <span
+                  className={`px-2 py-0.5 rounded font-mono font-bold text-[10px] uppercase shrink-0 ${
+                    doc.status === 'active'
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                      : doc.status === 'pending_review'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                      : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                  }`}
+                >
+                  {doc.status.replace('_', ' ')}
+                </span>
+              </div>
+
+              {/* NPI & Licensure row */}
+              <div className="grid grid-cols-2 gap-2 text-xs p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                <div>
+                  <span className="text-[9px] font-mono text-slate-500 uppercase block">NPI & State</span>
+                  <span className="font-mono text-sky-400 font-bold text-[11px]">{doc.npi}</span>
+                  <span className="text-slate-400 text-[10px] block">State {doc.licenseState}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono text-slate-500 uppercase block">Visits / Rating</span>
+                  <span className="font-mono text-white font-bold text-[11px]">{doc.totalEncounters} Encounters</span>
+                  {doc.rating > 0 && (
+                    <span className="text-amber-400 text-[10px] flex items-center gap-0.5">
+                      ★ {doc.rating} / 5.0
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Actions row */}
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <Link
+                  href={`/consultants/${doc.id}`}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold text-xs border border-slate-700"
+                >
+                  View Dossier
+                </Link>
+                {doc.status === 'pending_review' && (
+                  <button
+                    onClick={() => handleApprove(doc.id)}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs"
+                  >
+                    Approve
+                  </button>
+                )}
+                {doc.status === 'active' && (
+                  <button
+                    onClick={() => handleSuspend(doc.id)}
+                    className="px-3 py-1.5 rounded-lg bg-rose-950 text-rose-400 hover:bg-rose-900 border border-rose-800 text-xs"
+                  >
+                    Suspend
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop View: Full Roster Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-950 text-slate-400 font-mono uppercase text-[10px] tracking-wider border-b border-slate-800">
               <tr>
