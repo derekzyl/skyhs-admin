@@ -1,22 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { errorMessage, login } from '@/lib/api';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('cmo.admin@skylinehealth.org');
-  const [password, setPassword] = useState('••••••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
-    setTimeout(() => {
+    try {
+      await login(email.trim(), password);
       router.push('/');
-    }, 500);
+    } catch (err) {
+      setError(errorMessage(err, 'Login failed. Check your credentials.'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,6 +75,12 @@ export default function AdminLoginPage() {
             <span className="material-symbols-outlined text-sky-400 text-base">vpn_key</span>
             <span>YubiKey FIDO2 or Google Authenticator 2FA enforced upon login.</span>
           </div>
+
+          {error && (
+            <p className="text-xs text-rose-400 bg-rose-950/40 border border-rose-800/50 rounded-xl px-3 py-2">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
