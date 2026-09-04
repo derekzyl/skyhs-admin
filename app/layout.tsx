@@ -4,9 +4,51 @@ import AdminSidebar from '../components/AdminSidebar';
 import AdminMobileNav from '../components/AdminMobileNav';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://admin.skylinehealth.org'),
   title: 'Skyline Health | Executive & Telehealth Command Console',
   description:
     'Institutional administration console for real-time telehealth operations, clinician credentialing, continuous biometric telemetry monitoring, and financial payouts.',
+  keywords: [
+    'Skyline Health Admin',
+    'telehealth operations',
+    'clinical console',
+    'remote patient monitoring administration',
+    'biometric telemetry',
+  ],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: [{ url: '/logo.png' }],
+    shortcut: ['/favicon.ico'],
+  },
+  openGraph: {
+    title: 'Skyline Health | Executive & Telehealth Command Console',
+    description:
+      'Institutional administration console for real-time telehealth operations, clinician credentialing, continuous biometric telemetry monitoring, and financial payouts.',
+    url: 'https://admin.skylinehealth.org',
+    siteName: 'Skyline Health Admin Command',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Skyline Health Executive Operations Command',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Skyline Health | Executive & Telehealth Command Console',
+    description:
+      'Institutional administration console for real-time telehealth operations, clinician credentialing, continuous biometric telemetry monitoring, and financial payouts.',
+    images: ['/og-image.jpg'],
+    creator: '@SkylineHealth',
+  },
 };
 
 export default function RootLayout({

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function AdminLoginPage() {
@@ -22,8 +23,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-slate-950 text-white">
       <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center text-white mx-auto shadow-lg shadow-sky-950">
-            <span className="material-symbols-outlined text-2xl">shield</span>
+          <div className="w-14 h-14 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center mx-auto shadow-lg shadow-sky-950 p-2 overflow-hidden">
+            <Image
+              src="/logo.png"
+              alt="Skyline Health Logo"
+              width={56}
+              height={56}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
           <h1 className="text-xl font-bold text-white tracking-tight">
             Skyline Health Operations Command

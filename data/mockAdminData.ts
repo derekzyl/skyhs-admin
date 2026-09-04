@@ -58,7 +58,7 @@ export interface AdminDispute {
 export const MOCK_ADMIN_CONSULTANTS: AdminConsultant[] = [
   {
     id: 'doc-1',
-    name: 'Dr. Julian Vance, MD',
+    name: 'Dr. Chidi Okafor, MD, FACC',
     npi: '1892049102',
     specialty: 'Cardiology',
     subSpecialty: 'Electrophysiology',
@@ -208,7 +208,7 @@ export const MOCK_ACTIVE_CALLS: AdminActiveCall[] = [
 export const MOCK_PAYOUTS: AdminPayoutRecord[] = [
   {
     id: 'PAY-2026-102',
-    clinicianName: 'Dr. Julian Vance, MD',
+    clinicianName: 'Dr. Chidi Okafor, MD',
     npi: '1892049102',
     period: 'Oct 14 - Oct 20, 2026',
     encountersCount: 24,
@@ -220,7 +220,7 @@ export const MOCK_PAYOUTS: AdminPayoutRecord[] = [
   },
   {
     id: 'PAY-2026-103',
-    clinicianName: 'Dr. Anthony Adebayo, MBBS',
+    clinicianName: 'Dr. Damilola Adebayo, MBBS',
     npi: '1783940182',
     period: 'Oct 14 - Oct 20, 2026',
     encountersCount: 38,
@@ -232,7 +232,7 @@ export const MOCK_PAYOUTS: AdminPayoutRecord[] = [
   },
   {
     id: 'PAY-2026-104',
-    clinicianName: 'Dr. Sarah Lin, MD, PhD',
+    clinicianName: 'Dr. Aminat Adeyemi, MD, FWACP',
     npi: '1903829104',
     period: 'Oct 14 - Oct 20, 2026',
     encountersCount: 20,
@@ -247,8 +247,8 @@ export const MOCK_PAYOUTS: AdminPayoutRecord[] = [
 export const MOCK_DISPUTES: AdminDispute[] = [
   {
     id: 'DSP-401',
-    patientName: 'Samantha Cruz',
-    clinicianName: 'Dr. Anthony Adebayo',
+    patientName: 'Kelechi Adeleke',
+    clinicianName: 'Dr. Damilola Adebayo',
     encounterId: 'sess-84920',
     reason: 'Audio dropped for 4 minutes during vital sign interpretation.',
     date: 'Oct 22, 2026',
@@ -258,8 +258,8 @@ export const MOCK_DISPUTES: AdminDispute[] = [
   },
   {
     id: 'DSP-402',
-    patientName: 'Robert Vance',
-    clinicianName: 'Dr. Marcus Brody',
+    patientName: 'Zainab Balogun',
+    clinicianName: 'Dr. Chidi Okafor',
     encounterId: 'sess-83910',
     reason: 'Prescription delay at local pharmacy due to DEA suffix typo.',
     date: 'Oct 21, 2026',

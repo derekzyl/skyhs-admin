@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function AdminSidebar() {
@@ -38,8 +39,14 @@ export default function AdminSidebar() {
       <div>
         <div className="h-16 px-5 border-b border-slate-800 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-white shadow-md">
-              <span className="material-symbols-outlined text-xl">vital_signs</span>
+            <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden p-1 shadow-md shrink-0">
+              <Image
+                src="/logo.png"
+                alt="Skyline Health"
+                width={36}
+                height={36}
+                className="w-full h-full object-contain"
+              />
             </div>
             {!collapsed && (
               <div>

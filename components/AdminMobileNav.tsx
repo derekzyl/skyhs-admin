@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function AdminMobileNav() {
@@ -34,8 +35,14 @@ export default function AdminMobileNav() {
       {/* ── TOP MOBILE BAR ──────────────────────────────────────────────────────── */}
       <div className="h-14 px-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-white shadow-md shrink-0">
-            <span className="material-symbols-outlined text-lg">vital_signs</span>
+          <div className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden p-1 shadow-md shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Skyline Health"
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <div className="text-xs font-extrabold tracking-tight text-white leading-none">

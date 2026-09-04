@@ -120,10 +120,10 @@ export default function AdminCommandConsolePage() {
                 <img
                   src={
                     call.id === 'call-01'
-                      ? 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80'
+                      ? '/images/avatars/patient_zainab.jpg'
                       : call.id === 'call-02'
-                      ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80'
-                      : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80'
+                      ? '/images/avatars/patient_kelechi.jpg'
+                      : '/images/avatars/patient_zainab.jpg'
                   }
                   alt={call.patientName}
                   className="w-full h-full object-cover opacity-75"
@@ -144,7 +144,13 @@ export default function AdminCommandConsolePage() {
                 {/* Doctor PiP inside stream card */}
                 <div className="absolute bottom-3 right-3 w-14 h-14 rounded-xl overflow-hidden border border-white/40 shadow-md">
                   <img
-                    src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&q=80"
+                    src={
+                      call.id === 'call-01'
+                        ? '/images/avatars/dr_chidi_okafor.jpg'
+                        : call.id === 'call-02'
+                        ? '/images/avatars/dr_damilola_ade.jpg'
+                        : '/images/avatars/dr_aminat_adeyemi.jpg'
+                    }
                     alt={call.doctorName}
                     className="w-full h-full object-cover"
                   />
