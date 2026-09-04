@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { apiGet, apiPost, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import { Consultant, mapConsultantStatus } from '@/lib/types';
 
 export default function ConsultantDetailPage() {
@@ -127,7 +128,7 @@ export default function ConsultantDetailPage() {
                   {consultant.sub_specialty ? ` • ${consultant.sub_specialty}` : ''}
                 </div>
                 <div className="text-xs text-slate-400 font-mono mt-0.5">
-                  NPI: {consultant.npi_number || '—'} • {consultant.hospital || '—'}
+                  MDCN: {consultant.npi_number || '—'} • {consultant.hospital || '—'}
                 </div>
               </div>
             </div>
@@ -154,8 +155,8 @@ export default function ConsultantDetailPage() {
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
             <p>{consultant.bio || 'No biography on file.'}</p>
             <p className="text-slate-500 font-mono">
-              Rating {consultant.rating_avg} ({consultant.review_count} reviews) • Fee $
-              {fee.toFixed(2)}
+              Rating {consultant.rating_avg} ({consultant.review_count} reviews) • Fee{' '}
+              {formatNgn(fee)}
             </p>
           </div>
 
@@ -166,18 +167,18 @@ export default function ConsultantDetailPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 text-[10px] uppercase">Patient Fee / Visit</span>
-                <div className="text-lg font-bold text-white mt-1">${fee.toFixed(2)}</div>
+                <div className="text-lg font-bold text-white mt-1">{formatNgn(fee)}</div>
               </div>
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 text-[10px] uppercase">Platform Share (15%)</span>
                 <div className="text-lg font-bold text-sky-400 mt-1">
-                  ${(fee * 0.15).toFixed(2)}
+                  {formatNgn(fee * 0.15)}
                 </div>
               </div>
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 text-[10px] uppercase">Clinician Payout (85%)</span>
                 <div className="text-lg font-bold text-emerald-400 mt-1">
-                  ${(fee * 0.85).toFixed(2)}
+                  {formatNgn(fee * 0.85)}
                 </div>
               </div>
             </div>

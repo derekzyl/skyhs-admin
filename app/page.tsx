@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { apiGet, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import type { ConsultationSession } from '@/lib/types';
 
 export default function AdminCommandConsolePage() {
@@ -109,7 +110,7 @@ export default function AdminCommandConsolePage() {
         <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
           <div className="text-xs font-mono text-slate-400">Live Gross Fees</div>
           <div className="text-3xl font-extrabold font-mono text-emerald-400">
-            ${sessions.reduce((n, s) => n + (s.fee || 0), 0).toFixed(0)}
+            {formatNgn(sessions.reduce((n, s) => n + (s.fee || 0), 0))}
           </div>
         </div>
       </div>
@@ -162,7 +163,7 @@ export default function AdminCommandConsolePage() {
                       {call.status}
                     </span>
                     <span className="text-[10px] font-mono text-sky-400">
-                      ${call.fee.toFixed(2)}
+                      {formatNgn(call.fee)}
                     </span>
                   </div>
                   <div>

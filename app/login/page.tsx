@@ -3,7 +3,29 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { errorMessage, login } from '@/lib/api';
+import { apiGet, clearAuthTokens, errorMessage, login } from '@/lib/api';
+
+type MePayload = {
+  is_platform_admin?: boolean;
+  user_type?: string;
+  roles?: unknown;
+  data?: MePayload;
+};
+
+function unwrapMe(raw: unknown): MePayload | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const obj = raw as MePayload;
+  if (obj.data && typeof obj.data === 'object') return obj.data;
+  return obj;
+}
+
+function isAuthorizedAdmin(me: MePayload | null): boolean {
+  if (!me) return false;
+  if (me.is_platform_admin === true) return true;
+  if (String(me.user_type || '').toLowerCase() === 'admin') return true;
+  const roles = Array.isArray(me.roles) ? me.roles.map(String) : [];
+  return roles.some((r) => r === 'super_admin' || r === 'admin');
+}
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -18,6 +40,13 @@ export default function AdminLoginPage() {
     setLoading(true);
     try {
       await login(email.trim(), password);
+      const meRaw = await apiGet<unknown>('/api/v1/auth/me');
+      const me = unwrapMe(meRaw);
+      if (!isAuthorizedAdmin(me)) {
+        clearAuthTokens();
+        setError('Not authorized for admin console');
+        return;
+      }
       router.push('/');
     } catch (err) {
       setError(errorMessage(err, 'Login failed. Check your credentials.'));

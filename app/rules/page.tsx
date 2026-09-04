@@ -16,7 +16,7 @@ export default function AdminRulesPage() {
 
       <div className="rounded-2xl border border-slate-800 bg-slate-900 p-10 text-center space-y-3">
         <span className="material-symbols-outlined text-4xl text-slate-500">rule</span>
-        <h2 className="text-sm font-bold text-white">No alert rules configured</h2>
+        <h2 className="text-sm font-bold text-white">Coming soon</h2>
         <p className="text-xs text-slate-400 max-w-md mx-auto">
           Custom triage rules are not available in this build. Wearable alerts continue to use
           server-side health risk endpoints when enabled.

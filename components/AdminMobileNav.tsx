@@ -108,8 +108,6 @@ export default function AdminMobileNav() {
   const platformNav = [
     { label: 'Patient Directory', href: '/patients', icon: 'groups' },
     { label: 'Wearable Device Fleet', href: '/fleet', icon: 'watch' },
-    { label: 'Alert Rules Engine', href: '/rules', icon: 'rule' },
-    { label: 'Hospital EHR Integrations', href: '/integrations', icon: 'sync_saved_locally' },
   ];
 
   return (

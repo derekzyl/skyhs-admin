@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiGet, apiPost, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import type { ConsultationSession } from '@/lib/types';
 
 export default function AdminPayoutsPage() {
@@ -100,7 +101,7 @@ export default function AdminPayoutsPage() {
         >
           <span className="material-symbols-outlined text-base">send_money</span>
           <span>
-            Disburse Pending ({payable.length}) · ${net.toFixed(2)}
+            Disburse Pending ({payable.length}) · {formatNgn(net)}
           </span>
         </button>
       </div>
@@ -119,19 +120,19 @@ export default function AdminPayoutsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
           <div className="text-xs font-mono uppercase text-slate-400">All Sessions Gross</div>
-          <div className="text-3xl font-extrabold font-mono text-white">${gross.toFixed(2)}</div>
+          <div className="text-3xl font-extrabold font-mono text-white">{formatNgn(gross)}</div>
           <div className="text-xs text-slate-400">{sessions.length} sessions</div>
         </div>
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
           <div className="text-xs font-mono uppercase text-slate-400">Platform (15% pending)</div>
           <div className="text-3xl font-extrabold font-mono text-sky-400">
-            ${platform.toFixed(2)}
+            {formatNgn(platform)}
           </div>
         </div>
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
           <div className="text-xs font-mono uppercase text-slate-400">Net Pending Disbursement</div>
           <div className="text-3xl font-extrabold font-mono text-emerald-400">
-            ${net.toFixed(2)}
+            {formatNgn(net)}
           </div>
         </div>
       </div>
@@ -178,9 +179,9 @@ export default function AdminPayoutsPage() {
                       {p.consultant_name || p.consultant_id.slice(0, 8)}
                     </td>
                     <td className="py-3.5 px-4 font-mono">{p.payment_status}</td>
-                    <td className="py-3.5 px-4 font-mono">${p.fee.toFixed(2)}</td>
+                    <td className="py-3.5 px-4 font-mono">{formatNgn(p.fee)}</td>
                     <td className="py-3.5 px-4 font-mono text-emerald-400">
-                      ${(p.fee * 0.85).toFixed(2)}
+                      {formatNgn(p.fee * 0.85)}
                     </td>
                     <td className="py-3.5 px-4 font-mono uppercase text-[10px]">
                       {p.payout_status}

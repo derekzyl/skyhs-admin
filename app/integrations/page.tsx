@@ -18,7 +18,7 @@ export default function AdminIntegrationsPage() {
         <span className="material-symbols-outlined text-4xl text-slate-500">
           sync_saved_locally
         </span>
-        <h2 className="text-sm font-bold text-white">No integrations configured</h2>
+        <h2 className="text-sm font-bold text-white">Coming soon</h2>
         <p className="text-xs text-slate-400 max-w-md mx-auto">
           Epic, Cerner, and other EHR connectors are not wired in this environment. Configure
           partners when institutional APIs are available.

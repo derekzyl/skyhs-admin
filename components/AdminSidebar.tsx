@@ -113,7 +113,6 @@ export default function AdminSidebar() {
   const platformNav = [
     { label: 'Patient Directory', href: '/patients', icon: 'groups' },
     { label: 'Wearable Fleet', href: '/fleet', icon: 'watch' },
-    { label: 'Alert Rules Engine', href: '/rules', icon: 'rule' },
   ];
 
   return (

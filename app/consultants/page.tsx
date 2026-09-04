@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { apiGet, apiPost, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import { Consultant, mapConsultantStatus } from '@/lib/types';
 
 type UiStatus = 'all' | 'active' | 'pending_review' | 'suspended';
@@ -106,7 +107,7 @@ export default function AdminConsultantsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by physician name, NPI, hospital or specialty..."
+              placeholder="Search by physician name, MDCN license, hospital or specialty..."
               className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-sky-500"
             />
           </div>
@@ -170,7 +171,7 @@ export default function AdminConsultantsPage() {
                             {doc.display_name}
                           </Link>
                           <div className="text-[11px] text-slate-400">
-                            {doc.specialty} • NPI {doc.npi_number || '—'}
+                            {doc.specialty} • MDCN {doc.npi_number || '—'}
                           </div>
                         </div>
                       </div>
@@ -207,7 +208,7 @@ export default function AdminConsultantsPage() {
                   <tr>
                     <th className="py-3 px-4">Clinician</th>
                     <th className="py-3 px-4">Specialty</th>
-                    <th className="py-3 px-4">NPI</th>
+                    <th className="py-3 px-4">MDCN</th>
                     <th className="py-3 px-4">Fee</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
@@ -229,7 +230,7 @@ export default function AdminConsultantsPage() {
                         </td>
                         <td className="py-3.5 px-4">{doc.specialty}</td>
                         <td className="py-3.5 px-4 font-mono">{doc.npi_number || '—'}</td>
-                        <td className="py-3.5 px-4 font-mono">${doc.fee.toFixed(2)}</td>
+                        <td className="py-3.5 px-4 font-mono">{formatNgn(doc.fee)}</td>
                         <td className="py-3.5 px-4 font-mono uppercase text-[10px]">
                           {uiStatus.replace('_', ' ')}
                         </td>

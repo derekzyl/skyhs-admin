@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiGet, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import type { Consultant, ConsultationSession, DeviceOut } from '@/lib/types';
 
 export default function ExecutiveHealthCommandPage() {
@@ -102,7 +103,7 @@ export default function ExecutiveHealthCommandPage() {
         <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
           <div className="text-xs font-mono text-slate-400">Paid consult fees</div>
           <div className="text-3xl font-extrabold font-mono text-white">
-            {loading ? '…' : `$${grossFees.toLocaleString()}`}
+            {loading ? '…' : formatNgn(grossFees)}
           </div>
         </div>
         <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">

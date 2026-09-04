@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { apiGet, apiPost, errorMessage } from '@/lib/api';
+import { formatNgn } from '@/lib/money';
 import type { ConsultationSession } from '@/lib/types';
 
 export default function AdminDisputesPage() {
@@ -93,7 +94,7 @@ export default function AdminDisputesPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-3 font-mono">
-                  <span className="text-slate-400">Amount: ${dsp.fee.toFixed(2)}</span>
+                  <span className="text-slate-400">Amount: {formatNgn(dsp.fee)}</span>
                   <span
                     className={`px-2 py-0.5 rounded font-bold text-[10px] uppercase ${
                       dsp.dispute_status === 'resolved'
