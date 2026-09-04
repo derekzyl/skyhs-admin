@@ -133,6 +133,12 @@ async function request<T>(
   }
 
   if (!res.ok) {
+    if (res.status === 401 && useAuth && typeof window !== 'undefined') {
+      clearAuthTokens();
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login';
+      }
+    }
     throw new ApiError(
       formatErrorMessage(parsed, res.statusText || `Request failed (${res.status})`),
       res.status,

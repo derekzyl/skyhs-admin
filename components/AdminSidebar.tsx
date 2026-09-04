@@ -1,26 +1,113 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { apiGet, clearAuthTokens, errorMessage } from '@/lib/api';
+import type { Consultant, ConsultationSession } from '@/lib/types';
+
+type MeUser = {
+  id?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  role?: string;
+  [key: string]: unknown;
+};
+
+function unwrapMe(raw: unknown): MeUser | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const obj = raw as Record<string, unknown>;
+  if (obj.data && typeof obj.data === 'object') return obj.data as MeUser;
+  return obj as MeUser;
+}
+
+function displayName(user: MeUser | null): string {
+  if (!user) return 'Administrator';
+  const parts = [user.first_name, user.last_name].filter(Boolean);
+  if (parts.length) return parts.join(' ');
+  return user.email || 'Administrator';
+}
+
+function initials(user: MeUser | null): string {
+  const name = displayName(user);
+  const bits = name.split(/\s+/).filter(Boolean);
+  if (bits.length >= 2) return `${bits[0][0]}${bits[1][0]}`.toUpperCase();
+  return name.slice(0, 2).toUpperCase() || 'AD';
+}
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [user, setUser] = useState<MeUser | null>(null);
+  const [pendingConsultants, setPendingConsultants] = useState(0);
+  const [openDisputes, setOpenDisputes] = useState(0);
+  const [liveSessions, setLiveSessions] = useState(0);
 
-  // If on login page, hide the sidebar
-  if (pathname === '/login') {
+  useEffect(() => {
+    if (pathname === '/login' || pathname === '/reset-password') return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const [meRaw, consultants, disputed, live] = await Promise.all([
+          apiGet<unknown>('/api/v1/auth/me').catch(() => null),
+          apiGet<Consultant[]>('/api/v1/consultancy/admin/consultants').catch(() => []),
+          apiGet<ConsultationSession[]>(
+            '/api/v1/consultancy/admin/sessions?disputed_only=true'
+          ).catch(() => []),
+          apiGet<ConsultationSession[]>(
+            '/api/v1/consultancy/admin/sessions?live_only=true'
+          ).catch(() => []),
+        ]);
+        if (cancelled) return;
+        setUser(unwrapMe(meRaw));
+        setPendingConsultants(
+          (consultants || []).filter((c) => c.status === 'pending').length
+        );
+        setOpenDisputes((disputed || []).length);
+        setLiveSessions((live || []).length);
+      } catch (err) {
+        if (!cancelled) console.warn(errorMessage(err));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
+
+  if (pathname === '/login' || pathname === '/reset-password') {
     return null;
   }
 
+  const logout = () => {
+    clearAuthTokens();
+    router.replace('/login');
+  };
+
   const telehealthNav = [
-    { label: 'Live Console', href: '/', icon: 'dashboard', badge: 'LIVE' },
+    {
+      label: 'Live Console',
+      href: '/',
+      icon: 'dashboard',
+      badge: liveSessions > 0 ? 'LIVE' : undefined,
+    },
     { label: 'Executive Command', href: '/executive', icon: 'shield' },
-    { label: 'Consultant Network', href: '/consultants', icon: 'stethoscope', badge: '12 New' },
+    {
+      label: 'Consultant Network',
+      href: '/consultants',
+      icon: 'stethoscope',
+      badge: pendingConsultants > 0 ? `${pendingConsultants} New` : undefined,
+    },
     { label: 'Clinical Analytics', href: '/analytics', icon: 'monitoring' },
     { label: 'Payouts & Billing', href: '/payouts', icon: 'account_balance_wallet' },
-    { label: 'Disputes & Flags', href: '/disputes', icon: 'flag', badge: '2 Open' },
+    {
+      label: 'Disputes & Flags',
+      href: '/disputes',
+      icon: 'flag',
+      badge: openDisputes > 0 ? `${openDisputes} Open` : undefined,
+    },
   ];
 
   const platformNav = [
@@ -35,7 +122,6 @@ export default function AdminSidebar() {
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
-      {/* ── TOP: BRAND ──────────────────────────────────────────────────────────── */}
       <div>
         <div className="h-16 px-5 border-b border-slate-800 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
@@ -71,9 +157,7 @@ export default function AdminSidebar() {
           </button>
         </div>
 
-        {/* Navigation Items */}
         <div className="p-3 space-y-6 overflow-y-auto max-h-[calc(100vh-140px)]">
-          {/* Section 1: Telehealth Operations */}
           <div>
             {!collapsed && (
               <div className="px-3 pb-2 text-[10px] font-mono uppercase tracking-widest font-bold text-slate-400">
@@ -82,7 +166,9 @@ export default function AdminSidebar() {
             )}
             <nav className="space-y-1">
               {telehealthNav.map((item) => {
-                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== '/' && pathname.startsWith(item.href));
                 return (
                   <Link
                     key={item.href}
@@ -117,7 +203,6 @@ export default function AdminSidebar() {
             </nav>
           </div>
 
-          {/* Section 2: Platform & Fleet */}
           <div>
             {!collapsed && (
               <div className="px-3 pb-2 text-[10px] font-mono uppercase tracking-widest font-bold text-slate-400">
@@ -150,37 +235,40 @@ export default function AdminSidebar() {
         </div>
       </div>
 
-      {/* ── BOTTOM: SYSTEM HEALTH & ADMIN PROFILE ─────────────────────────────────── */}
       <div className="p-3 border-t border-slate-800 bg-slate-950/80 space-y-3">
         {!collapsed && (
           <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] space-y-1">
             <div className="flex items-center justify-between font-mono">
-              <span className="text-slate-400">WebRTC Mesh</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 live-pulse" />
-                Operational
+              <span className="text-slate-400">Chat sessions</span>
+              <span className="text-emerald-400 font-bold">
+                {liveSessions} live
               </span>
-            </div>
-            <div className="text-[10px] text-slate-400 font-mono">
-              Latency: 14ms • HIPAA Encrypted
             </div>
           </div>
         )}
 
-        {/* User Card */}
         <div className="flex items-center gap-3 px-2 py-1">
           <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-xs font-bold shrink-0">
-            CMO
+            {initials(user)}
           </div>
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <div className="text-xs font-bold text-white truncate">Dr. Arinze Okafor</div>
-              <div className="text-[10px] text-slate-400 truncate">Chief Medical Officer</div>
+              <div className="text-xs font-bold text-white truncate">
+                {displayName(user)}
+              </div>
+              <div className="text-[10px] text-slate-400 truncate">
+                {user?.email || 'Signed in'}
+              </div>
             </div>
           )}
-          <Link href="/login" title="Sign Out" className="text-slate-500 hover:text-slate-300">
+          <button
+            type="button"
+            onClick={logout}
+            title="Sign Out"
+            className="text-slate-500 hover:text-slate-300"
+          >
             <span className="material-symbols-outlined text-base">logout</span>
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

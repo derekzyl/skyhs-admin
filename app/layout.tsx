@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminMobileNav from '../components/AdminMobileNav';
+import AdminAuthGate from '../components/AdminAuthGate';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://admin.skylinehealth.org'),
@@ -71,11 +72,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-surface-canvas text-text-primary flex flex-col md:flex-row antialiased selection:bg-primary selection:text-white">
-        <AdminMobileNav />
-        <AdminSidebar />
-        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto md:max-h-screen">
-          {children}
-        </div>
+        <AdminAuthGate>
+          <AdminMobileNav />
+          <AdminSidebar />
+          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto md:max-h-screen">
+            {children}
+          </div>
+        </AdminAuthGate>
       </body>
     </html>
   );
